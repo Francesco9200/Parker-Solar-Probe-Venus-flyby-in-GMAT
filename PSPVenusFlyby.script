@@ -1,0 +1,184 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2026-05-24 21:26:03
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft PSP;
+PSP.DateFormat = UTCGregorian;
+PSP.Epoch = '03 Oct 2018 01:20:00.000';
+PSP.CoordinateSystem = VenusICRF;
+PSP.DisplayStateType = Cartesian;
+PSP.X = 568496.1905081868;
+PSP.Y = 233432.7319901772;
+PSP.Z = 36315.33797429875;
+PSP.VX = -21.29376455341736;
+PSP.VY = -8.437572269229019;
+PSP.VZ = -1.53968891276164;
+PSP.DryMass = 850;
+PSP.Cd = 2.2;
+PSP.Cr = 1.8;
+PSP.DragArea = 15;
+PSP.SRPArea = 1;
+PSP.SPADDragScaleFactor = 1;
+PSP.SPADSRPScaleFactor = 1;
+PSP.AtmosDensityScaleFactor = 1;
+PSP.ExtendedMassPropertiesModel = 'None';
+PSP.NAIFId = -10000001;
+PSP.NAIFIdReferenceFrame = -9000001;
+PSP.OrbitColor = Red;
+PSP.TargetColor = Teal;
+PSP.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+PSP.CdSigma = 1e+70;
+PSP.CrSigma = 1e+70;
+PSP.Id = 'SatId';
+PSP.Attitude = CoordinateSystemFixed;
+PSP.SPADSRPInterpolationMethod = Bilinear;
+PSP.SPADSRPScaleFactorSigma = 1e+70;
+PSP.SPADDragInterpolationMethod = Bilinear;
+PSP.SPADDragScaleFactorSigma = 1e+70;
+PSP.AtmosDensityScaleFactorSigma = 1e+70;
+PSP.ModelFile = 'aura.3ds';
+PSP.ModelOffsetX = 0;
+PSP.ModelOffsetY = 0;
+PSP.ModelOffsetZ = 0;
+PSP.ModelRotationX = 0;
+PSP.ModelRotationY = 0;
+PSP.ModelRotationZ = 0;
+PSP.ModelScale = 1;
+PSP.AttitudeDisplayStateType = 'Quaternion';
+PSP.AttitudeRateDisplayStateType = 'AngularVelocity';
+PSP.AttitudeCoordinateSystem = EarthMJ2000Eq;
+PSP.EulerAngleSequence = '321';
+
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel DefaultProp_ForceModel;
+DefaultProp_ForceModel.CentralBody = Venus;
+DefaultProp_ForceModel.PrimaryBodies = {Venus};
+DefaultProp_ForceModel.PointMasses = {Sun};
+DefaultProp_ForceModel.Drag = None;
+DefaultProp_ForceModel.SRP = Off;
+DefaultProp_ForceModel.RelativisticCorrection = Off;
+DefaultProp_ForceModel.ErrorControl = RSSStep;
+DefaultProp_ForceModel.GravityField.Venus.Degree = 4;
+DefaultProp_ForceModel.GravityField.Venus.Order = 4;
+DefaultProp_ForceModel.GravityField.Venus.StmLimit = 100;
+DefaultProp_ForceModel.GravityField.Venus.PotentialFile = 'MGNP180U.cof';
+DefaultProp_ForceModel.GravityField.Venus.TideModel = 'None';
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator DefaultProp;
+DefaultProp.FM = DefaultProp_ForceModel;
+DefaultProp.Type = RungeKutta89;
+DefaultProp.InitialStepSize = 60;
+DefaultProp.Accuracy = 9.999999999999999e-12;
+DefaultProp.MinStep = 0.001;
+DefaultProp.MaxStep = 1;
+DefaultProp.MaxStepAttempts = 50;
+DefaultProp.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create CoordinateSystem VenusICRF;
+VenusICRF.Origin = Venus;
+VenusICRF.Axes = ICRF;
+
+Create CoordinateSystem SunICRF;
+SunICRF.Origin = Sun;
+SunICRF.Axes = ICRF;
+
+Create CoordinateSystem VenusMJ2000Eq;
+VenusMJ2000Eq.Origin = Venus;
+VenusMJ2000Eq.Axes = MJ2000Eq;
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create OrbitView DefaultOrbitView;
+DefaultOrbitView.SolverIterations = Current;
+DefaultOrbitView.UpperLeft = [ 0.002352941176470588 0 ];
+DefaultOrbitView.Size = [ 0.5 0.4500601684717208 ];
+DefaultOrbitView.RelativeZOrder = 87;
+DefaultOrbitView.Maximized = false;
+DefaultOrbitView.Add = {PSP, Venus, Sun};
+DefaultOrbitView.CoordinateSystem = VenusMJ2000Eq;
+DefaultOrbitView.DrawObject = [ true true true ];
+DefaultOrbitView.DataCollectFrequency = 1;
+DefaultOrbitView.UpdatePlotFrequency = 50;
+DefaultOrbitView.NumPointsToRedraw = 0;
+DefaultOrbitView.ShowPlot = true;
+DefaultOrbitView.MaxPlotPoints = 20000;
+DefaultOrbitView.ShowLabels = true;
+DefaultOrbitView.ViewPointReference = Venus;
+DefaultOrbitView.ViewPointVector = [ 0 0 100000 ];
+DefaultOrbitView.ViewDirection = Venus;
+DefaultOrbitView.ViewScaleFactor = 1;
+DefaultOrbitView.ViewUpCoordinateSystem = VenusMJ2000Eq;
+DefaultOrbitView.ViewUpAxis = Z;
+DefaultOrbitView.EclipticPlane = Off;
+DefaultOrbitView.XYPlane = On;
+DefaultOrbitView.WireFrame = Off;
+DefaultOrbitView.Axes = On;
+DefaultOrbitView.Grid = Off;
+DefaultOrbitView.SunLine = Off;
+DefaultOrbitView.UseInitialView = On;
+DefaultOrbitView.StarCount = 7000;
+DefaultOrbitView.EnableStars = On;
+DefaultOrbitView.EnableConstellations = On;
+
+Create GroundTrackPlot DefaultGroundTrackPlot;
+DefaultGroundTrackPlot.SolverIterations = Current;
+DefaultGroundTrackPlot.UpperLeft = [ 0.002941176470588235 0.4548736462093863 ];
+DefaultGroundTrackPlot.Size = [ 0.5 0.4500601684717208 ];
+DefaultGroundTrackPlot.RelativeZOrder = 156;
+DefaultGroundTrackPlot.Maximized = false;
+DefaultGroundTrackPlot.Add = {PSP};
+DefaultGroundTrackPlot.DataCollectFrequency = 1;
+DefaultGroundTrackPlot.UpdatePlotFrequency = 50;
+DefaultGroundTrackPlot.NumPointsToRedraw = 0;
+DefaultGroundTrackPlot.ShowPlot = false;
+DefaultGroundTrackPlot.MaxPlotPoints = 20000;
+DefaultGroundTrackPlot.CentralBody = Earth;
+DefaultGroundTrackPlot.TextureMap = 'ModifiedBlueMarble.jpg';
+
+Create XYPlot XYPlot1;
+XYPlot1.SolverIterations = Current;
+XYPlot1.UpperLeft = [ 0 0.4693140794223827 ];
+XYPlot1.Size = [ 0.5 0.4500601684717208 ];
+XYPlot1.RelativeZOrder = 73;
+XYPlot1.Maximized = false;
+XYPlot1.XVariable = PSP.ElapsedSecs;
+XYPlot1.YVariables = {PSP.SunICRF.VMAG};
+XYPlot1.ShowGrid = true;
+XYPlot1.ShowPlot = true;
+
+Create XYPlot XYPlot2;
+XYPlot2.SolverIterations = Current;
+XYPlot2.UpperLeft = [ 0.4994117647058823 0.001203369434416366 ];
+XYPlot2.Size = [ 0.5 0.4500601684717208 ];
+XYPlot2.RelativeZOrder = 81;
+XYPlot2.Maximized = false;
+XYPlot2.XVariable = PSP.ElapsedSecs;
+XYPlot2.YVariables = {PSP.Venus.RMAG};
+XYPlot2.ShowGrid = true;
+XYPlot2.ShowPlot = true;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate DefaultProp(PSP) {PSP.ElapsedSecs = 53412};
