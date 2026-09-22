@@ -39,7 +39,7 @@ We input these data in GMAT simulating the orbit and plotting the graph of the v
 
 <img width="849" height="372" alt="image" src="https://github.com/user-attachments/assets/783ddf19-d3ca-4977-a079-48e51242bce0" />
 
-Radiaton solar pressun was ignored in this analysis.
+Radiaton solar pressure was ignored in this analysis.
 
 ## Conclusion
 
